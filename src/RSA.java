@@ -5,6 +5,7 @@ public class RSA {
     public static int n;
     public static int p;
     public static int q;
+    public static int dy;
     public static int d;
     public static int phi;
     public static int e;
@@ -59,14 +60,34 @@ public class RSA {
         System.out.println("N - " + n);
         phi= (p-1) * (q-1);
         System.out.println("Phi - "+ phi);
-        d = gcd(p-1, q-1);
-        System.out.println("D - "+d);
         e = randN();
+        dy = gcd(e, phi);
+        while (flag) {
+            if (dy != 1) {
+                e = randN();
+            }
+            if (dy == 1) {
+                flag = true;
+                break;
+            }
+        }
+
+        System.out.println("Dy - "+dy);
         System.out.println("E " + e);
         System.out.println("("+ e + "," + n + ")");
+        d =  modInverse(e, phi);
+        if (d <0 ) d = phi+d;
+        System.out.println(d);
         return d;
     }
+    public static int modInverse(int a, int m)
+    {
 
+        for (int x = 1; x < m; x++)
+            if (((a%m) * (x%m)) % m == 1)
+                return x;
+        return 1;
+    }
     public static boolean prim(int num){
         for(int i = 2; i<num ; i++){
             if (num % i == 0){
