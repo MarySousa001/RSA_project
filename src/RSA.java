@@ -9,23 +9,9 @@ public class RSA {
     public static int d = 0;
     public static int phi;
     public static int e;
+    public static BigInteger bigN;
 
 
-//    public static int randPQ() {
-//        int newNumber = 0;
-//        boolean a = false;
-//        Random random = new Random();
-//        int max = 499;
-//        int min = 3;
-//        while (!a) {
-//            int number = min + random.nextInt(max);
-//            if (prim(number)) {
-//                newNumber = number;
-//                a = true;
-//            }
-//        }
-//        return newNumber;
-//    }
 
     public static int randN(int min, int max) {
         int newNumber = 0;
@@ -57,6 +43,7 @@ public class RSA {
         q = pq;
         System.out.println(("Q -" + q));
         n = p * q;
+        bigN = BigInteger.valueOf(n);
         System.out.println("N - " + n);
         phi = (p - 1) * (q - 1);
         System.out.println("Phi - " + phi);
@@ -72,6 +59,7 @@ public class RSA {
         System.out.println("Dy - " + dy);
         System.out.println("E " + e);
 
+        // create d
         int k =1;
         double al;
         int ei = e;
@@ -92,13 +80,13 @@ public class RSA {
         System.out.println("D " + d);
         return d;
     }
-
-    public static int modInverse(int a, int m) {
-        for (int x = 1; x < m; x++)
-            if (((a % m) * (x % m)) % m == 1)
-                return x;
-        return 1;
-    }
+//
+//    public static int modInverse(int a, int m) {
+//        for (int x = 1; x < m; x++)
+//            if (((a % m) * (x % m)) % m == 1)
+//                return x;
+//        return 1;
+//    }
 
     public static boolean prim(int num) {
         for (int i = 2; i < num; i++) {
@@ -118,25 +106,30 @@ public class RSA {
     }
 
     public static void encrypt(int message) {
-        int Exp = e;
-        long la = 1;
-        while (Exp != 0){
-            la *= message;
-            -- Exp;
-        }
-        long ca = la % n;
+        BigInteger ai = BigInteger.valueOf(message);
+        BigInteger complete = ai.pow(e);
+//        int Exp = e;
+//        long la = 1;
+//        while (Exp != 0){
+//            la *= message;
+//            -- Exp;
+//        }
+//        long ca = la % n;
+        BigInteger ca = complete.mod(bigN);
         System.out.println("C " + ca);
 
     }
 
     public static void decrypt(int mess) {
-        int Exp = d;
-        BigInteger ai = BigInteger.valueOf(1);
-        while (Exp !=0){
-            //ai *= BigInteger.valueOf(mess);
-            --Exp;
-        }
-        long ma = ai % n;
+        BigInteger ai = BigInteger.valueOf(mess);
+        BigInteger complete = ai.pow(d);
+//        int Exp = d;
+//        long ai = 1;
+//        while (Exp !=0){
+//            ai *= mess;
+//            --Exp;
+//        }
+        BigInteger ma = complete.mod(bigN);
         System.out.println("M " + ma);
     }
 
